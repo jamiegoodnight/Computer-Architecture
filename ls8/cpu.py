@@ -75,17 +75,21 @@ class CPU:
     def run(self):
         """Run the CPU."""
         running = True
+        position_1 = self.ram[self.pc + 1]
+        position_2 = self.ram[self.pc + 2]
         while running:
             if self.ram[self.pc] == HLT:
                 running = False
-            if self.ram[self.pc] == LDI:
+
+            elif self.ram[self.pc] == LDI:
                 position = self.ram[self.pc + 1]
                 print(position, "POSITION")
                 self.reg[position] = self.ram[self.pc + 2]
-            if self.ram[self.pc] == PRN:
-                # print("Hi, here is self.pc+1", self.pc +
-                #       1, "And the reg", self.reg)
+
+            elif self.ram[self.pc] == PRN:
                 position = self.ram[self.pc + 1]
                 print(self.reg[position])
+            else:
+                print(f"Unknown instruction in RAM at: {self.pc}")
             self.pc += 1
         pass
