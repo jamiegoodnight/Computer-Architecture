@@ -13,14 +13,14 @@ class CPU:
     def __init__(self):
         """Construct a new CPU."""
         self.pc = 0
-        self.ram = []
-        self.reg = []
+        self.ram = [0] * 6
+        self.reg = [0] * 8
 
     def ram_read(self, pc):
         print(self.ram[pc])
 
     def ram_write(self, prog):
-        ram.append(prog)
+        self.ram.append(prog)
 
     def load(self):
         """Load a program into memory."""
@@ -76,11 +76,16 @@ class CPU:
         """Run the CPU."""
         running = True
         while running:
-            if ram[self.pc] == HLT:
+            if self.ram[self.pc] == HLT:
                 running = False
-            if ram[self.pc] == LDI:
-                pass
-            if ram[self.pc] == PRN:
-                pass
+            if self.ram[self.pc] == LDI:
+                position = self.ram[self.pc + 1]
+                print(position, "POSITION")
+                self.reg[position] = self.ram[self.pc + 2]
+            if self.ram[self.pc] == PRN:
+                # print("Hi, here is self.pc+1", self.pc +
+                #       1, "And the reg", self.reg)
+                position = self.ram[self.pc + 1]
+                print(self.reg[position])
             self.pc += 1
         pass
