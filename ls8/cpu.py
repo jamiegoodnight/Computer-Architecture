@@ -82,14 +82,13 @@ class CPU:
                 running = False
 
             elif self.ram[self.pc] == LDI:
-                position = self.ram[self.pc + 1]
-                print(position, "POSITION")
-                self.reg[position] = self.ram[self.pc + 2]
+                self.reg[position_1] = position_2
 
             elif self.ram[self.pc] == PRN:
-                position = self.ram[self.pc + 1]
-                print(self.reg[position])
+                print(self.reg[position_1])
+
             else:
                 print(f"Unknown instruction in RAM at: {self.pc}")
+
             self.pc += 1
         pass
