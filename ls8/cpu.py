@@ -79,34 +79,33 @@ class CPU:
         # position_2 = self.ram[self.pc + 2]
         print(self.ram, "SELF.RAM")
         while running:
-            print(self.usage, "USAGE", self.pc, "PC")
+            # print(self.usage, "USAGE", self.pc, "PC")
             if self.ram[self.pc] == HLT:
                 if self.usage-1 == self.pc:
-                    print("HALT")
+                    print("*****HLT*****")
                     running = False
 
             elif self.ram[self.pc] == LDI:
                 position_1 = self.ram[self.pc + 1]
                 position_2 = self.ram[self.pc + 2]
-                print("LDI")
-                print("POSITIONS", position_1, position_2)
-                print("PC", self.pc)
+                print("*****LDI*****")
                 self.reg[position_1] = position_2
-                print("REGISTER", self.reg)
+                self.pc += 3
 
             elif self.ram[self.pc] == PRN:
+                print("*****PRN*****")
                 print(self.reg[position_1])
+                self.pc += 2
 
             elif self.ram[self.pc] == MUL:
                 position_1 = self.ram[self.pc + 1]
                 position_2 = self.ram[self.pc + 2]
-                print("MUL")
-                print("REGISTER", self.reg)
-                print(position_1, position_2)
+                print("*****MUL*****")
                 print(self.reg[position_1]*self.reg[position_2])
+                self.pc += 3
 
             else:
                 print(f"Unknown instruction in RAM at: {self.pc}")
 
-            self.pc += 1
+            # self.pc += 1
         pass
