@@ -7,6 +7,8 @@ HLT = 0b00000001
 LDI = 0b10000010
 PRN = 0b01000111
 MUL = 0b10100010
+PUSH = 0b01000101
+POP = 0b01000110
 
 
 class CPU:
@@ -15,9 +17,10 @@ class CPU:
     def __init__(self):
         """Construct a new CPU."""
         self.pc = 0
-        self.ram = [0] * 15
+        self.ram = [0] * 256
         self.reg = [0] * 8
         self.usage = 0
+        self.sp = 7
 
     def ram_read(self, pc):
         print(self.ram[pc])
@@ -74,6 +77,8 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
+        self.reg[self.sp] = 244
+        cur_pos = self.ram[self.pc]
         running = True
         # position_1 = self.ram[self.pc + 1]
         # position_2 = self.ram[self.pc + 2]
@@ -103,6 +108,20 @@ class CPU:
                 print("*****MUL*****")
                 print(self.reg[position_1]*self.reg[position_2])
                 self.pc += 3
+
+            elif self.ram[self.pc] == POP:
+                value = self.ram[self.reg[self.sp]]
+                self.reg[self.ram[self.pc + 1]] = value
+                self.reg[self.sp] += 1
+
+                self.pc += 2
+
+            elif self.ram[self.pc] == PUSH:
+                self.reg[self.sp] -= 1
+                value = self.reg[self.ram[self.pc + 1]]
+                self.ram[self.reg[self.sp]] = value
+
+                self.pc += 2
 
             else:
                 print(f"Unknown instruction in RAM at: {self.pc}")
