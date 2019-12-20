@@ -14,6 +14,7 @@ PUSH = 0b01000101
 CALL = 0b01010000
 RET = 0b00010001
 ADD = 0b10100000
+JMP = 0b01010100
 
 
 class CPU:
@@ -144,6 +145,9 @@ class CPU:
                 value = self.reg[position_1] + self.reg[position_2]
                 self.reg[position_1] = value
                 self.pc += 3
+            elif ir == JMP:
+                jump = self.reg[self.ram[position_1]]
+                self.pc = jump
 
             else:
                 print(f"Unknown instruction in RAM at: {self.pc}")
