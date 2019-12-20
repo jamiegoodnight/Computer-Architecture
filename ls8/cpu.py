@@ -15,8 +15,9 @@ CALL = 0b01010000
 RET = 0b00010001
 ADD = 0b10100000
 JMP = 0b01010100
-FL = 0b00000000
 CMP = 0b10100111
+JEQ = 0b01010101
+JNE = 0b01010110
 
 
 class CPU:
@@ -29,6 +30,7 @@ class CPU:
         self.pc = 0
         self.usage = 0
         self.sp = 7
+        self.fl = 0b00000000
 
     def ram_read(self, MAR):
         return self.ram[MAR]
@@ -150,17 +152,41 @@ class CPU:
 
             elif ir == JMP:
                 print("*****JMP*****")
-                jump = self.reg[self.ram[position_1]]
+                jump = self.reg[self.ram[self.pc + 1]]
                 self.pc = jump
 
             elif ir == CMP:
                 print("*****CMP*****")
-                if self.register[position_1] < self.register[position_2]:
-                    FL = 0b00000100
-                if self.register[position_1] > self.register[position_2]:
-                    FL = 0b00000010
-                if self.register[position_1] == self.register[position_2]:
-                    FL = 0b00000001
+                if self.reg[position_1] < self.reg[position_2]:
+                    self.fl = 0b00000100
+                elif self.reg[position_1] > self.reg[position_2]:
+                    self.fl = 0b00000010
+                elif self.reg[position_1] == self.reg[position_2]:
+                    self.fl = 0b00000001
+                else:
+                    print("ERROR")
+                self.pc += 3
+
+            elif ir == JNE:
+                print("*****JNE*****")
+                if self.fl != 0b00000001:
+                    print("PC", self.pc)
+                    print("POSITION 1", position_1)
+                    # jump = self.reg[self.ram[position_1]]
+                    jump = self.reg[self.ram[self.pc + 1]]
+                    print("JUMP", jump)
+                    self.pc = jump
+                else:
+                    self.pc += 2
+
+            elif ir == JEQ:
+                print("*****JEQ*****")
+                if self.fl == 0b00000001:
+                    # jump = self.reg[self.ram[position_1]]
+                    jump = self.reg[self.ram[self.pc + 1]]
+                    self.pc = jump
+                else:
+                    self.pc += 2
 
             else:
                 print(f"Unknown instruction in RAM at: {self.pc}")
